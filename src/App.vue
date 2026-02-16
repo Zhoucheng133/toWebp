@@ -1,5 +1,5 @@
 <template>
-  Hello
+  <v-btn>按钮</v-btn>
 </template>
 
 <script setup lang="ts">

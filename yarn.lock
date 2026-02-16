@@ -1011,3 +1011,8 @@ vue@^3.5.13:
     "@vue/runtime-dom" "3.5.28"
     "@vue/server-renderer" "3.5.28"
     "@vue/shared" "3.5.28"
+
+vuetify@^3.11.8:
+  version "3.11.8"
+  resolved "https://registry.npmmirror.com/vuetify/-/vuetify-3.11.8.tgz#8d7dc3615c924a8e10e42f4652002b476d5d790e"
+  integrity sha512-4iKnntOnLFFklygZjzlVfcHrtLO8+iK4HOhiia6HP2U8v82x+ngaSCgm+epvPrGyCMfCpfuEttqD2qElrr1axw==
