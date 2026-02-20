@@ -1,6 +1,6 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "towebp",
+  "productName": "toWebp",
   "version": "0.1.0",
   "identifier": "zhouc.towebp",
   "build": {
@@ -13,8 +13,8 @@
     "windows": [
       {
         "title": "towebp",
-        "width": 400,
-        "height": 300,
+        "width": 800,
+        "height": 600,
         "visible": false,
         "center": true,
         "resizable": false,
