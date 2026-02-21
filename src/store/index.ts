@@ -3,9 +3,9 @@ import { ref } from "vue";
 
 export default defineStore("store", ()=>{
 
-  const path=ref<null | string>(null);
+  const files=ref<null | string[]>(null);
 
   return {
-    path,
+    files,
   }
 })

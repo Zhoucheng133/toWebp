@@ -1,5 +1,5 @@
 <template>
-  <AddView v-if="path==null" />
+  <AddView v-if="files==null" />
 </template>
 
 <script setup lang="ts">
@@ -21,6 +21,6 @@ onMounted(async ()=>{
   })
 })
 
-let { path }=storeToRefs(store());
+let { files }=storeToRefs(store());
 
 </script>
