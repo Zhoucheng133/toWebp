@@ -4,7 +4,7 @@
       <v-btn variant="flat" color="primary" @click="pickFile">选择图片文件</v-btn>
       <v-btn variant="plain" @click="pickDir">选择目录</v-btn>
     </div>
-    <div class="label">或拖拽文件/目录到这里</div>
+    <div class="label">或拖拽文件到这里</div>
   </div>
 </template>
 
@@ -68,19 +68,29 @@ async function pickDir() {
 }
 
 async function dropHandler(targets: string[]) {
-  const firstPath=targets[0] as string;
-  let extension;
-  try {
-    extension=(await path.extname(firstPath)).toLowerCase();
-  } catch (_) {
+
+  let list: string[]=[];
+
+  for (const val of targets) {
+    console.log(val);
+    
+    let extension: string="";
+    try {
+      extension=(await path.extname(val)).toLowerCase();
+    } catch (_) {
+      continue;
+    }
+    if(extension==='jpeg'||extension==='png'||extension==='jpg'){
+      list.push(val);
+    }
+  }
+
+  if(list.length===0){
     await message('不支持的文件', { title: '无法处理', kind: 'error' });
     return;
   }
-  if(extension==='jpeg'||extension==='png'||extension==='jpg'){
-    files.value = [firstPath];
-  }else{
-    await message('不支持的文件', { title: '无法处理', kind: 'error' });
-  }
+
+  files.value = list;
 }
 
 onMounted(async ()=>{
