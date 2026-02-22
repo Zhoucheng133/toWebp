@@ -7,12 +7,12 @@ fn greet(name: &str) -> String {
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
-        .setup(|app| {
+        .setup(|_app| {
             #[cfg(target_os = "macos")]
             {
                 use tauri::menu::{Menu, PredefinedMenuItem, Submenu};
 
-                let handle = app.handle();
+                let handle = _app.handle();
                 let locale = "zh";
                 let (app_menu_name, quit_label, edit_label, copy_label, paste_label, select_all_label, undo_label, redo_label, window_label, minimize_label, fullscreen_label, about_label, hide_label) = 
                 if locale == "zh" {
@@ -58,7 +58,7 @@ pub fn run() {
                 )?;
 
                 let menu = Menu::with_items(handle, &[&app_menu, &edit_menu, &window_menu])?;
-                app.set_menu(menu)?;
+                _app.set_menu(menu)?;
             }
             Ok(())
         })
