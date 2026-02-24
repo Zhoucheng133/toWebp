@@ -1,5 +1,6 @@
 <template>
   <AddView v-if="files==null" />
+  <ConfigView v-else />
 </template>
 
 <script setup lang="ts">
@@ -9,6 +10,7 @@ import { storeToRefs } from 'pinia';
 import store from './store';
 import AddView from './views/AddView.vue';
 import { useTheme } from 'vuetify';
+import ConfigView from './views/ConfigView.vue';
 const theme = useTheme();
 
 onMounted(async ()=>{
