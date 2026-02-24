@@ -56,7 +56,7 @@ let { files } = storeToRefs(store());
 .page {
   padding: 0;
   display: grid;
-  grid-template-columns: 300px auto;
+  grid-template-columns: 300px minmax(0, 1fr);
   gap: 10px;
   height: 100vh;
   width: 100vw;

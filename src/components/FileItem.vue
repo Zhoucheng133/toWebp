@@ -23,6 +23,9 @@ function selectTask(){
 </script>
 
 <style scoped>
+.file_name{
+  font-size: 15px;
+}
 .file_path{
   width: 100%;
   overflow: hidden;
