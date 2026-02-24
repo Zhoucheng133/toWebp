@@ -19,10 +19,10 @@ export default defineStore("store", ()=>{
 
   const files=ref<null | TaskItem[]>(null);
 
-  const selectedFile=ref<null | TaskItem>();
+  const selectedIndex=ref<null | number>(null);
 
   return {
     files,
-    selectedFile
+    selectedIndex
   }
 })

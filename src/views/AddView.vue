@@ -19,7 +19,7 @@ import { open } from '@tauri-apps/plugin-dialog';
 import { readDir } from '@tauri-apps/plugin-fs';
 
 let unlisten: UnlistenFn;
-let { files }= storeToRefs(store());
+let { files, selectedIndex }= storeToRefs(store());
 
 async function pickFile() {
   const file = await open({
@@ -42,6 +42,7 @@ async function pickFile() {
       )
     });
     files.value = await Promise.all(taskPromises);
+    selectedIndex.value=0;
   }
 }
 
@@ -79,7 +80,7 @@ async function pickDir() {
     )
   });
   files.value = await Promise.all(taskPromises);
-
+  selectedIndex.value=0;
 }
 
 async function dropHandler(targets: string[]) {
@@ -113,6 +114,7 @@ async function dropHandler(targets: string[]) {
     )
   });
   files.value = await Promise.all(taskPromises);
+  selectedIndex.value=0;
 }
 
 onMounted(async ()=>{
@@ -140,13 +142,12 @@ onBeforeUnmount(() => {
 .page{
   height: 100vh;
   width: 100vw;
-  background-color: white;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  padding-bottom: 20px;
+  /* padding-bottom: 20px; */
   user-select: none;
   -webkit-user-select: none;
   gap: 20px;
