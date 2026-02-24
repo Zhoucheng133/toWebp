@@ -10,7 +10,7 @@
 
 <script setup lang="ts">
 import { path } from '@tauri-apps/api';
-import store from '../store';
+import store, { TaskItem } from '../store';
 import { storeToRefs } from 'pinia';
 import { message } from '@tauri-apps/plugin-dialog';
 import { onBeforeUnmount, onMounted } from 'vue';
@@ -34,7 +34,14 @@ async function pickFile() {
   });
 
   if(file){
-    files.value = file;
+    const taskPromises = file.map(async (item: string)=>{
+      const name=await path.basename(item)
+      return new TaskItem(
+        item,
+        name
+      )
+    });
+    files.value = await Promise.all(taskPromises);
   }
 }
 
@@ -63,7 +70,15 @@ async function pickDir() {
       }
     }
   }
-  files.value = imageFiles;
+  // files.value = imageFiles;
+  const taskPromises = imageFiles.map(async (item: string)=>{
+    const name=await path.basename(item)
+    return new TaskItem(
+      item,
+      name
+    )
+  });
+  files.value = await Promise.all(taskPromises);
 
 }
 
@@ -90,7 +105,14 @@ async function dropHandler(targets: string[]) {
     return;
   }
 
-  files.value = list;
+  const taskPromises = list.map(async (item: string)=>{
+    const name=await path.basename(item)
+    return new TaskItem(
+      item,
+      name
+    )
+  });
+  files.value = await Promise.all(taskPromises);
 }
 
 onMounted(async ()=>{
