@@ -2,13 +2,11 @@
   <div class="page">
     <div class="list_view">
       <div class="file_list_container">
-        <FileItem v-for="file in files" :taskItem="file"></FileItem>
+        <FileItem v-for="(file, index) in files" :taskItem="file" :index="index"></FileItem>
       </div>
     </div>
     <div class="config_view">
-      <div class="config_container">
-
-      </div>
+      <Config />
     </div>
   </div>
 </template>
@@ -18,19 +16,19 @@
 import { storeToRefs } from 'pinia';
 import store from '../store';
 import FileItem from '../components/FileItem.vue';
+import Config from '../components/Config.vue';
 
 let { files } = storeToRefs(store());
 
 </script>
 
 <style scoped>
-.config_container{
+/* .config_container{
   height: 100%;
   width: 100%;
   background-color: blue;
   border-radius: 10px;
-  /* background-color: rgb(245, 245, 245); */
-}
+} */
 .config_view{
   height: 100%;
   width: 100%;
@@ -38,6 +36,7 @@ let { files } = storeToRefs(store());
   padding-right: 20px;
   padding-bottom: 20px;
   box-sizing: border-box;
+  padding-top: 40px;
 }
 .file_list_container{
   height: 100%;
@@ -51,7 +50,7 @@ let { files } = storeToRefs(store());
   box-sizing: border-box;
   padding-left: 20px;
   padding-bottom: 20px;
-  /* padding-top: 10px; */
+  padding-top: 40px;
   overflow: hidden;
 }
 .page {

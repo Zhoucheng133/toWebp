@@ -1,16 +1,24 @@
 <template>
-  <div class="container">
+  <div :class="index==selectedIndex ? 'container_selected' : 'container' " @click="selectTask">
     <div class="file_name">{{ taskItem.name }}</div>
     <div class="file_path">{{ taskItem.path }}</div>
   </div>
 </template>
 
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia';
 import { TaskItem } from '../store';
+import store from '../store';
 
-const props = defineProps(["taskItem"])
+const { selectedIndex } = storeToRefs(store());
+
+const props = defineProps(["taskItem", "index"])
 const taskItem = props.taskItem as TaskItem;
+const index = props.index as number;
 
+function selectTask(){
+  selectedIndex.value = index;
+}
 
 </script>
 
@@ -23,7 +31,26 @@ const taskItem = props.taskItem as TaskItem;
   white-space: nowrap;
   font-size: 13px;
 }
-.container {
+
+.container_selected{
+  background-color: #E9F3FE;
+}
+
+.container:hover{
+  background-color: #EDF5FE;
+}
+
+@media (prefers-color-scheme: dark) {
+  .container_selected{
+    background-color: rgb(80, 80, 80);
+  }
+
+  .container:hover{
+    background-color: rgb(50, 50, 50);
+  }
+}
+
+.container, .container_selected {
   display: flex;
   align-items: flex-start;
   flex-direction: column;
@@ -31,7 +58,8 @@ const taskItem = props.taskItem as TaskItem;
   user-select: none;
   -moz-user-select: none;
   -webkit-user-select: none;
-  background-color: lightgrey;
+  /* background-color: lightgrey; */
+  transition: background-color 0.2s linear;
   box-sizing: border-box;
   /* padding: 7px; */
   padding-top: 7px;
@@ -39,6 +67,6 @@ const taskItem = props.taskItem as TaskItem;
   padding-left: 10px;
   padding-right: 10px;
   border-radius: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 </style>
