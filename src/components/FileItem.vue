@@ -1,9 +1,10 @@
 <template>
   <div :class="index==selectedIndex ? 'container_selected' : 'container' " @click="selectTask">
     <div class="status">
-      <i class="fa-regular fa-clock" v-if="files![selectedIndex!].status==Status.wait"></i>
-      <i class="fa-solid fa-hourglass" v-if="files![selectedIndex!].status==Status.processing"></i>
-      <i class="fa-solid fa-check" v-if="files![selectedIndex!].status==Status.done"></i>
+      <i class="fa-regular fa-clock" v-if="files![index!].status==Status.wait"></i>
+      <i class="fa-solid fa-hourglass" v-if="files![index!].status==Status.processing"></i>
+      <i class="fa-solid fa-check" v-if="files![index!].status==Status.done"></i>
+      <i class="fa-solid fa-xmark" v-if="files![index!].status==Status.err"></i>
     </div>
     <div class="info">
       <div class="file_name">{{ taskItem.name }}</div>

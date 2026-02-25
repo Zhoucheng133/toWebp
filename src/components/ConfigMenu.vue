@@ -1,6 +1,6 @@
 <template>
   <div class="menu">
-    <v-btn variant="flat" color="primary" prepend-icon="mdi-play" @click="convert">转换</v-btn>
+    <v-btn variant="flat" color="primary" prepend-icon="mdi-play" @click="convert" :disabled="running">转换</v-btn>
     <v-btn variant="text" prepend-icon="mdi-cogs" @click="applyAll" :disabled="files?.length==1">应用到所有</v-btn>
     <v-btn variant="text" prepend-icon="mdi-close" style="margin-left: auto;" @click="close">关闭</v-btn>
   </div>
@@ -11,12 +11,15 @@ import { storeToRefs } from 'pinia';
 import store from '../store';
 import { confirm, message } from '@tauri-apps/plugin-dialog';
 
-const { files, selectedIndex, output } = storeToRefs(store());
+const { files, selectedIndex, output, running } = storeToRefs(store());
 
 async function convert(){
   if(output.value.length==0){
     await message('没有选择输出目录', { title: '错误', kind: 'error' });
+    return;
   }
+
+  store().convertHandler();
 }
 
 async function applyAll(){

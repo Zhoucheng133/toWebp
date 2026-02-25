@@ -88,8 +88,6 @@ async function dropHandler(targets: string[]) {
   let list: string[]=[];
 
   for (const val of targets) {
-    console.log(val);
-    
     let extension: string="";
     try {
       extension=(await path.extname(val)).toLowerCase();

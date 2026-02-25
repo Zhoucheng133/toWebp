@@ -1,7 +1,70 @@
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
+use libloading::{Library, Symbol};
+use std::ffi::{CStr, CString};
+use std::os::raw::{c_char, c_int};
+use tauri::{AppHandle, Manager};
+use std::sync::OnceLock;
+type ConvertFn = unsafe extern "C" fn(
+    path: *const c_char,
+    width: *mut c_int,
+    height: *mut c_int,
+    output: *const c_char,
+    quality: *mut c_int,
+) -> *mut c_char;
+
+static CORE_LIB: OnceLock<Library> = OnceLock::new();
+
+fn get_convert_fn(handle: &AppHandle) -> Result<Symbol<'static, ConvertFn>, String> {
+    let lib = CORE_LIB.get_or_init(|| {
+        let lib_name = if cfg!(target_os = "windows") { "core.dll" } 
+                       else if cfg!(target_os = "macos") { "core.dylib" } 
+                       else { "core.so" };
+        
+        let resource_path = handle.path()
+            .resolve(format!("libs/{}", lib_name), tauri::path::BaseDirectory::Resource)
+            .expect("Failed to resolve lib path");
+
+        unsafe { Library::new(resource_path).expect("Failed to load library") }
+    });
+
+    unsafe {
+        // 这里 lib 是 &'static Library，所以 get 出来的 Symbol 也是 'static
+        let func: Symbol<ConvertFn> = lib.get(b"Convert")
+            .map_err(|e| format!("Symbol error: {}", e))?;
+        Ok(func)
+    }
+}
+
 #[tauri::command]
-fn greet(name: &str) -> String {
-    format!("Hello, {}! You've been greeted from Rust!", name)
+async fn convert(
+    handle: tauri::AppHandle,
+    path: String,
+    mut width: i32,
+    mut height: i32,
+    output: String,
+    mut quality: i32,
+) -> Result<String, String> {
+    // 获取已经加载好的单例库中的函数
+    let convert_sym = get_convert_fn(&handle)?;
+
+    unsafe {
+        let c_path = CString::new(path).map_err(|_| "Path error")?;
+        let c_output = CString::new(output).map_err(|_| "Output error")?;
+
+        let result_ptr = convert_sym(
+            c_path.as_ptr(),
+            &mut width as *mut c_int,
+            &mut height as *mut c_int,
+            c_output.as_ptr(),
+            &mut quality as *mut c_int,
+        );
+
+        if result_ptr.is_null() {
+            return Err("NULL pointer from library".into());
+        }
+
+        Ok(CStr::from_ptr(result_ptr).to_string_lossy().into_owned())
+    }
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -65,7 +128,7 @@ pub fn run() {
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![greet])
+        .invoke_handler(tauri::generate_handler![convert])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
