@@ -9,6 +9,8 @@ import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import { createPinia } from "pinia";
 
+import '@fortawesome/fontawesome-free/css/all.css';
+
 const vuetify = createVuetify({
   components,
   directives,
