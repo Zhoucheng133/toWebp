@@ -31,15 +31,17 @@
             style="width: 120px; max-width: 150px;"
             variant="outlined"
             hide-details
+            placeholder="宽度"
           ></v-text-field>
           <v-icon icon="mdi-close"></v-icon>
           <v-text-field
-            v-model="files![selectedIndex!].width"
+            v-model="files![selectedIndex!].height"
             density="compact"
             type="number"
             style="width: 120px; max-width: 150px;"
             variant="outlined"
             hide-details
+            placeholder="高度"
           ></v-text-field>
         </div>
       </div>
@@ -47,7 +49,8 @@
         <div class="config_item_label"></div>
         <div class="tip flex align-center gap-1">
           <i class="fa-solid fa-circle-info"></i>
-          <p>0表示自动宽/高度，都为0则原始尺寸</p>
+          <p>WxH</p>
+          <p class="ml-3">0表示自动宽/高度，都为0则原始尺寸</p>
         </div>
       </div>
     </div>
