@@ -37,6 +37,7 @@ let { files } = storeToRefs(store());
   padding-bottom: 20px;
   box-sizing: border-box;
   padding-top: 40px;
+  min-height: 0;
 }
 .file_list_container{
   height: 100%;
