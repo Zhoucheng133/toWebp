@@ -1,16 +1,23 @@
 <template>
   <div :class="index==selectedIndex ? 'container_selected' : 'container' " @click="selectTask">
-    <div class="file_name">{{ taskItem.name }}</div>
-    <div class="file_path">{{ taskItem.path }}</div>
+    <div class="status">
+      <i class="fa-regular fa-clock" v-if="files![selectedIndex!].status==Status.wait"></i>
+      <i class="fa-solid fa-hourglass" v-if="files![selectedIndex!].status==Status.processing"></i>
+      <i class="fa-solid fa-check" v-if="files![selectedIndex!].status==Status.done"></i>
+    </div>
+    <div class="info">
+      <div class="file_name">{{ taskItem.name }}</div>
+      <div class="file_path">{{ taskItem.path }}</div>
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia';
-import { TaskItem } from '../store';
+import { Status, TaskItem } from '../store';
 import store from '../store';
 
-const { selectedIndex } = storeToRefs(store());
+const { selectedIndex, files } = storeToRefs(store());
 
 const props = defineProps(["taskItem", "index"])
 const taskItem = props.taskItem as TaskItem;
@@ -23,6 +30,9 @@ function selectTask(){
 </script>
 
 <style scoped>
+.info{
+  min-width: 0;
+}
 .file_name{
   font-size: 15px;
 }
@@ -55,16 +65,15 @@ function selectTask(){
 
 .container, .container_selected {
   display: flex;
-  align-items: flex-start;
-  flex-direction: column;
+  align-items: center;
   justify-content: center;
+  gap: 10px;
+
   user-select: none;
   -moz-user-select: none;
   -webkit-user-select: none;
-  /* background-color: lightgrey; */
   transition: background-color 0.2s linear;
   box-sizing: border-box;
-  /* padding: 7px; */
   padding-top: 7px;
   padding-bottom: 7px;
   padding-left: 10px;

@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
-enum Status{
+export enum Status{
   wait,
   processing,
   done
