@@ -57,8 +57,8 @@
     <div class="config_item" style="margin-top: 10px;">
       <div class="config_item_label">输出</div>
       <div class="config_item_child flex gap-1">
-        <v-text-field v-model="output" density="compact" variant="outlined" hide-details></v-text-field>
-        <v-btn variant="flat">选择</v-btn>
+        <v-text-field v-model="output" density="compact" variant="outlined" hide-details readonly></v-text-field>
+        <v-btn variant="flat" @click="pickOutput">选择</v-btn>
       </div>
     </div>
   </div>
@@ -69,6 +69,7 @@ import ConfigMenu from './ConfigMenu.vue';
 import { storeToRefs } from 'pinia';
 import store from '../store';
 import { computed } from 'vue';
+import { open } from '@tauri-apps/plugin-dialog';
 
 const { files, selectedIndex, output } = storeToRefs(store());
 
@@ -78,6 +79,17 @@ const title = computed(() => {
   }
   return "";
 });
+
+async function pickOutput(){
+  const file = await open({
+    multiple: false,
+    directory: true,
+  });
+  if(file){
+    output.value = file;
+    localStorage.setItem("output", output.value);
+  }
+}
 
 </script>
 

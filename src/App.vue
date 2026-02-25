@@ -21,6 +21,10 @@ onMounted(async ()=>{
   await appWindow.listen('tauri://theme-changed', (event) => {
     theme.change(event.payload as string)
   })
+  const output=localStorage.getItem('output');
+  if(output){
+    store().output=output;
+  }
 })
 
 let { files }=storeToRefs(store());
