@@ -8,8 +8,10 @@
 
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia';
-import store from '../store';
+import store, { Status } from '../store';
 import { confirm, message } from '@tauri-apps/plugin-dialog';
+import { path } from '@tauri-apps/api';
+import { invoke } from '@tauri-apps/api/core';
 
 const { files, selectedIndex, output, running } = storeToRefs(store());
 
@@ -19,7 +21,38 @@ async function convert(){
     return;
   }
 
-  store().convertHandler();
+  running.value=true;
+
+  for(let i=0;i<files.value!.length;i++){
+    files.value![i].status=Status.processing;
+    const fileNameWithExt = files.value![i].name;
+    const ext = await path.extname(fileNameWithExt);
+    const stem = await path.basename(fileNameWithExt, `.${ext}`);
+    let outputPath=await path.join(output.value, `${stem}.webp`);
+
+    console.log("【Run】"+i);
+    
+
+    const response: string=await invoke('convert', {
+      path: files.value![i].path,
+      width: files.value![i].width,
+      height: files.value![i].height,
+      quality: files.value![i].quality,
+      output: outputPath,
+    });
+
+    if(response=='OK'){
+      console.log("【Status】"+(files.value![i].status==Status.processing));
+      files.value![i].status=Status.done;
+      console.log("【Status】"+(files.value![i].status==Status.processing));
+      
+      console.log("【Done】"+i);
+    }else{
+      files.value![i].status=Status.err;
+    }
+  }
+
+  running.value=false;
 }
 
 async function applyAll(){
