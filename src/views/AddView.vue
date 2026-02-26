@@ -21,6 +21,11 @@ import { readDir } from '@tauri-apps/plugin-fs';
 let unlisten: UnlistenFn;
 let { files, selectedIndex }= storeToRefs(store());
 
+const sorter = new Intl.Collator(undefined, { 
+  numeric: true, 
+  sensitivity: 'base' 
+});
+
 async function pickFile() {
   const file = await open({
     multiple: true,
@@ -34,6 +39,7 @@ async function pickFile() {
   });
 
   if(file){
+    file.sort(sorter.compare);
     const taskPromises = file.map(async (item: string)=>{
       const name=await path.basename(item)
       return new TaskItem(
@@ -71,7 +77,9 @@ async function pickDir() {
       }
     }
   }
-  // files.value = imageFiles;
+
+  imageFiles.sort(sorter.compare);
+
   const taskPromises = imageFiles.map(async (item: string)=>{
     const name=await path.basename(item)
     return new TaskItem(
@@ -103,6 +111,8 @@ async function dropHandler(targets: string[]) {
     await message('不支持的文件', { title: '无法处理', kind: 'error' });
     return;
   }
+
+  list.sort(sorter.compare);
 
   const taskPromises = list.map(async (item: string)=>{
     const name=await path.basename(item)
