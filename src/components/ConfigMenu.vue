@@ -30,15 +30,12 @@ async function convert(){
     const stem = await path.basename(fileNameWithExt, `.${ext}`);
     let outputPath=await path.join(output.value, `${stem}.webp`);
 
-    console.log("【Run】"+i);
-    
-
     const response: string=await invoke('convert', {
-      path: files.value![i].path,
+      path: files.value![i].path.replaceAll('\\', '/'),
       width: parseInt(files.value![i].width),
       height: parseInt(files.value![i].height),
       quality: files.value![i].quality,
-      output: outputPath,
+      output: outputPath.replaceAll('\\', '/'),
     });
 
     if(response=='OK'){
