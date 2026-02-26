@@ -11,8 +11,8 @@ export enum Status{
 export class TaskItem{
   public status: Status=Status.wait;
   public quality: number=80;
-  public height: number=0;
-  public width: number=0;
+  public height: string="0";
+  public width: string="0";
   constructor(
     public path: string,
     public name: string,

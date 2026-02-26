@@ -35,18 +35,14 @@ async function convert(){
 
     const response: string=await invoke('convert', {
       path: files.value![i].path,
-      width: files.value![i].width,
-      height: files.value![i].height,
+      width: parseInt(files.value![i].width),
+      height: parseInt(files.value![i].height),
       quality: files.value![i].quality,
       output: outputPath,
     });
 
     if(response=='OK'){
-      console.log("【Status】"+(files.value![i].status==Status.processing));
       files.value![i].status=Status.done;
-      console.log("【Status】"+(files.value![i].status==Status.processing));
-      
-      console.log("【Done】"+i);
     }else{
       files.value![i].status=Status.err;
     }
