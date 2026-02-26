@@ -3,10 +3,15 @@
 body{
   font-family: Arial, Helvetica, sans-serif;
   background-color: #F8FBFF;
+  margin: 0;
 }
 
 @media (prefers-color-scheme: dark) {
   body{
     background-color: #1E1E1E;
   }
+}
+
+html {
+  overflow: hidden !important;
 }
